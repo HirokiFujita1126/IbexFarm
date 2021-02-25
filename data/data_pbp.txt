@@ -1,0 +1,12 @@
+After the_lady woke_up the_boy in_the_room ate a_sandwich.
+After the_lady woke_up, the_boy in_the_room ate a_sandwich.
+After the_woman dressed the_boy at_home read a_book.
+After the_woman dressed, the_boy at_home read a_book.
+After the_bear scratched the_lion in_the_forest climbed the_tree.
+After the_bear scratched, the_lion in_the_forest climbed the_tree.
+After the_parents hugged their_child in_the_park sat on_the_bench.
+After the_parents hugged, their_child in_the_park sat on_the_bench.
+After the_parents kissed the_child in_the_kitchen ate some_chocolate.
+After the_parents kissed, the_child in_the_kitchen ate some_chocolate.
+After the_mouse scratched the_man with_the_dark_hair drank some_water.
+After the_mouse scratched, the_man with_the_dark_hair drank some_water.

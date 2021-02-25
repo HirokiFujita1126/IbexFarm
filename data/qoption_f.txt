@@ -1,0 +1,12 @@
+yes,no
+yes,no
+yes,no
+The boy,The girl
+yes,no
+The lady,The policeman
+yes,no
+yes,no
+yes,no
+yes,no
+yes,no
+yes,no
