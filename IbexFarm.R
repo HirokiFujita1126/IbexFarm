@@ -749,6 +749,7 @@ maze<-function(controller=NULL,
   
   comma=rep(c(","),times=nrow(sitem))
   
+  a<-rep(c("a:"),each=nrow(sitem))
   smitem<-material[material$c1=="sm:",]
   smitem$c1<-NULL
   list<-matrix(rep(NA,nrow(smitem)*ncol(smitem)),ncol=ncol(smitem))
@@ -1283,6 +1284,782 @@ cq<-function(controller=NULL,
   dat<-dplyr::bind_rows(controller,pdat,sdat,fdat)
   dat[is.na(dat)] <- " "
   write.table(dat,"cq.js",quote=FALSE,row.names=FALSE,col.names=FALSE)
+  
+  
+}
+
+
+spr_indiv_ex<-function(material=NULL,
+              number_of_condition=NULL,
+              name_of_experimental_material=NULL,
+              startfrom=NULL){
+
+  n<-1:ncol(material)
+  colnames(material)<-paste("c",n,sep="")
+  
+  sitem<-material[material$c1=="s:",]
+  sitem$c1<-NULL
+  sset<-nrow(sitem)/number_of_condition
+  br1<-rep(c("[["),each=nrow(sitem))
+  ncond2<-rep(c(1:number_of_condition),times=sset)
+  cond<-paste(name_of_experimental_material,ncond2,sep="")
+  cond<-gsub('^','"',cond)
+  cond<-gsub('$','",',cond)
+  item<-as.character(rep(c(startfrom:(sset+startfrom-1)),each=number_of_condition))#
+  br2<-rep(c("],"),each=nrow(sitem))
+  nmOftask<-"DashedSentence"
+  nmOftask<-gsub('^','"',nmOftask)
+  nmOftask<-gsub('$','",',nmOftask)
+  task<-rep(c(nmOftask),each=nrow(sitem))
+  s<-rep(c("{s:"),each=nrow(sitem))
+  br3<-rep(c("["),each=nrow(sitem))
+  nOfcol<-ncol(sitem)
+  nOfrow<-nrow(sitem)
+  list<-matrix(rep(NA,nOfrow*nOfcol),ncol=nOfcol)
+  for (j in 1:nOfcol){
+    d1<-sitem[j]
+    d1<-as.character(t(d1))
+    d1<-gsub('_' ,' ',d1)
+    d1<-gsub('^','"',d1)
+    d1<-gsub('$','",',d1)
+    list[,j]<-d1
+  }
+  material2<-ifelse(list=='"",'|list=='""',"",list)
+  material2<-gsub('([:.:])([:":])([:,:])','."',material2)
+  material2<-data.frame(material2)
+  br4<-rep(c("]},"),each=nrow(sitem))
+  nmOfq<-"Question"
+  nmOfq<-gsub('^','"',nmOfq)
+  nmOfq<-gsub('$','",',nmOfq)
+  cq<-rep(c(nmOfq),each=nrow(sitem))
+  br5<-rep(c("{q:"),each=nrow(sitem))
+  question<-material[material$c1=="sq:",]
+  question$c1<-NULL
+  qs=rep(c("a"),times=nrow(question))
+  qe=rep(c("z"),times=nrow(question))
+  qs<-gsub('^a','"',qs)
+  qe<-gsub('z$','",',qe)
+  question<-cbind(qs,question,qe)
+  as<-rep(c("as:["),each=nrow(sitem))
+  qoption<-material[material$c1=="so:",]
+  qoption$c1<-NULL
+  list<-matrix(rep(NA,nOfrow*nOfcol),ncol=nOfcol)
+  for (j in 1:nOfcol){
+    d1<-qoption[j]
+    d1<-as.character(t(d1))
+    d1<-gsub(',','","',d1)
+    list[,j]<-d1
+  }
+  qoption<-ifelse(list=='"",'|list=='""',"",list)
+  qoption<-gsub('([:.:])([:":])([:,:])','."',qoption)
+  qoption<-data.frame(qoption)
+  qs=rep(c("a"),times=nrow(question))
+  qe=rep(c("z"),times=nrow(question))
+  qs<-gsub('^a','"',qs)
+  qe<-gsub('z$','"',qe)
+  qoption<-cbind(qs,qoption,qe)
+  qoption<-qoption %>% mutate_all(na_if,"")
+  qoption<-qoption %>% select_if(all_na)
+  list<-matrix(rep(NA,nOfrow*ncol(qoption)),ncol=ncol(qoption))
+  for (j in 1:nrow(qoption)){
+    d1<-qoption[j,]
+    d1<-d1 %>% select_if(all_na)
+    d1<-as.matrix(d1)
+    list[j,1:dim(d1)[2]]<-d1[1:dim(d1)[2]]
+  }
+  qoption<-ifelse(list=='"",'|list=='""',"",list)
+  qoption<-gsub('([:.:])([:":])([:,:])','."',qoption)
+  qoption<-data.frame(qoption)
+  correct_response<-material[material$c1=="sco:",]
+  correct_response$c1<-NULL
+  qs=rep(c("a"),times=nrow(correct_response))
+  qe=rep(c("z"),times=nrow(correct_response))
+  qs<-gsub('^a','"',qs)
+  qe<-gsub('z$','"',qe)
+  correct_response<-cbind(qs,correct_response,qe)
+  correct_response<-correct_response %>% mutate_all(na_if,"")
+  correct_response<-correct_response %>% select_if(all_na)
+  list<-matrix(rep(NA,nOfrow*ncol(correct_response)),ncol=ncol(correct_response))
+  for (j in 1:nrow(correct_response)){
+    d1<-correct_response[j,]
+    d1<-d1 %>% select_if(all_na)
+    d1<-as.matrix(d1)
+    list[j,1:dim(d1)[2]]<-d1[1:dim(d1)[2]]
+  }
+  correct_response<-ifelse(list=='"",'|list=='""',"",list)
+  correct_response<-gsub('([:.:])([:":])([:,:])','."',correct_response)
+  correct_response<-data.frame(correct_response)
+  br6<-rep(c("], hasCorrect:"),each=nrow(sitem))
+  br7<-rep(c("}],"),each=nrow(sitem))
+  sdat<-data.frame(br1,cond,item,br2,task,s,br3,material2,br4,cq,br5,question,as,qoption,br6,correct_response,br7)
+  sdat<-sdat %>% mutate_all(na_if,"")
+  sdat<-sdat %>% select_if(all_na)
+  colnames(sdat)<-1:ncol(sdat)
+  
+  sdat[is.na(sdat)] <- " "
+  write.table(sdat,"spr_indiv_ex.js",quote=FALSE,row.names=FALSE,col.names=FALSE)
+}
+
+
+spr_indiv_f<-function(material=NULL,
+                      name_of_filler=NULL,
+                      startfrom=NULL){
+n<-1:ncol(material)
+colnames(material)<-paste("c",n,sep="")
+  
+fitem<-material[material$c1=="f:",]
+fitem$c1<-NULL
+
+br1<-rep(c("[["),each=nrow(fitem))
+nf<-rep(c(name_of_filler),nrow(fitem))
+nf<-gsub('^','"',nf)
+nf<-gsub('$','",',nf)
+item<-as.character(rep(c(startfrom:(nrow(fitem)+startfrom-1))))
+br2<-rep(c("],"),each=nrow(fitem))
+nmOftask<-"DashedSentence"
+nmOftask<-gsub('^','"',nmOftask)
+nmOftask<-gsub('$','",',nmOftask)
+task<-rep(c(nmOftask),each=nrow(fitem))
+s<-rep(c("{s:"),each=nrow(fitem))
+br3<-rep(c("["),each=nrow(fitem))
+nOfcol<-ncol(fitem)
+nOfrow<-nrow(fitem)
+list<-matrix(rep(NA,nOfrow*nOfcol),ncol=nOfcol)
+for (j in 1:nOfcol){
+  d1<-fitem[j]
+  d1<-as.character(t(d1))
+  d1<-gsub('_' ,' ',d1)
+  d1<-gsub('^','"',d1)
+  d1<-gsub('$','",',d1)
+  list[,j]<-d1
+}
+material2<-ifelse(list=='"",'|list=='""',"",list)
+material2<-gsub('([:.:])([:":])([:,:])','."',material2)
+material2<-data.frame(material2)
+br4<-rep(c("]},"),each=nrow(fitem))
+nmOfq<-"Question"
+nmOfq<-gsub('^','"',nmOfq)
+nmOfq<-gsub('$','",',nmOfq)
+cq<-rep(c(nmOfq),each=nrow(fitem))
+br5<-rep(c("{q:"),each=nrow(fitem))
+question<-material[material$c1=="fq:",]
+question$c1<-NULL
+qs=rep(c("a"),times=nrow(question))
+qe=rep(c("z"),times=nrow(question))
+qs<-gsub('^a','"',qs)
+qe<-gsub('z$','",',qe)
+question<-cbind(qs,question,qe)
+as<-rep(c("as:["),each=nrow(fitem))
+
+qoption<-material[material$c1=="fo:",]
+qoption$c1<-NULL
+list<-matrix(rep(NA,nOfrow*nOfcol),ncol=nOfcol)
+for (j in 1:nOfcol){
+  d1<-qoption[j]
+  d1<-as.character(t(d1))
+  d1<-gsub(',','","',d1)
+  list[,j]<-d1
+}
+qoption<-ifelse(list=='"",'|list=='""',"",list)
+qoption<-gsub('([:.:])([:":])([:,:])','."',qoption)
+qoption<-data.frame(qoption)
+qs=rep(c("a"),times=nrow(question))
+qe=rep(c("z"),times=nrow(question))
+qs<-gsub('^a','"',qs)
+qe<-gsub('z$','"',qe)
+qoption<-cbind(qs,qoption,qe)
+qoption<-qoption %>% mutate_all(na_if,"")
+qoption<-qoption %>% select_if(all_na)
+
+list<-matrix(rep(NA,nOfrow*ncol(qoption)),ncol=ncol(qoption))
+for (j in 1:nrow(qoption)){
+  d1<-qoption[j,]
+  d1<-d1 %>% select_if(all_na)
+  d1<-as.matrix(d1)
+  list[j,1:dim(d1)[2]]<-d1[1:dim(d1)[2]]
+}
+qoption<-ifelse(list=='"",'|list=='""',"",list)
+qoption<-gsub('([:.:])([:":])([:,:])','."',qoption)
+qoption<-data.frame(qoption)
+
+correct_response<-material[material$c1=="fco:",]
+correct_response$c1<-NULL
+qs=rep(c("a"),times=nrow(correct_response))
+qe=rep(c("z"),times=nrow(correct_response))
+qs<-gsub('^a','"',qs)
+qe<-gsub('z$','"',qe)
+correct_response<-cbind(qs,correct_response,qe)
+correct_response<-correct_response %>% mutate_all(na_if,"")
+correct_response<-correct_response %>% select_if(all_na)
+list<-matrix(rep(NA,nOfrow*ncol(correct_response)),ncol=ncol(correct_response))
+for (j in 1:nrow(correct_response)){
+  d1<-correct_response[j,]
+  d1<-d1 %>% select_if(all_na)
+  d1<-as.matrix(d1)
+  list[j,1:dim(d1)[2]]<-d1[1:dim(d1)[2]]
+}
+correct_response<-ifelse(list=='"",'|list=='""',"",list)
+correct_response<-gsub('([:.:])([:":])([:,:])','."',correct_response)
+correct_response<-data.frame(correct_response)
+
+br6<-rep(c("], hasCorrect:"),each=nrow(fitem))
+br7<-rep(c("}],"),each=nrow(fitem))
+
+fdat<-data.frame(br1,nf,item,br2,task,s,br3,material2,br4,cq,br5,question,as,qoption,br6,correct_response,br7)
+
+fdat<-fdat %>% mutate_all(na_if,"")
+fdat<-fdat %>% select_if(all_na)
+colnames(fdat)<-1:ncol(fdat)
+
+if(nrow(material[material$c1=="fnq:",])>0){
+  
+  fnqitem<-material[material$c1=="fnq:",]
+  fnqitem$c1<-NULL
+  
+  br1<-rep(c("[["),each=nrow(fnqitem))
+  nf<-rep(c(name_of_filler),nrow(fnqitem))
+  nf<-gsub('^','"',nf)
+  nf<-gsub('$','",',nf)
+  item2<-as.numeric(item)
+  item2<-as.character((max(item2)+1):(max(item2)+nrow(fnqitem)))
+  br2<-rep(c("],"),each=nrow(fnqitem))
+  nmOftask<-"DashedSentence"
+  nmOftask<-gsub('^','"',nmOftask)
+  nmOftask<-gsub('$','",',nmOftask)
+  task<-rep(c(nmOftask),each=nrow(fnqitem))
+  s<-rep(c("{s:"),each=nrow(fnqitem))
+  br3<-rep(c("["),each=nrow(fnqitem))
+  nOfcol<-ncol(fnqitem)
+  nOfrow<-nrow(fnqitem)
+  list<-matrix(rep(NA,nOfrow*nOfcol),ncol=nOfcol)
+  for (j in 1:nOfcol){
+    d1<-fnqitem[j]
+    d1<-as.character(t(d1))
+    d1<-gsub('_' ,' ',d1)
+    d1<-gsub('^','"',d1)
+    d1<-gsub('$','",',d1)
+    list[,j]<-d1
+  }
+  material2<-ifelse(list=='"",'|list=='""',"",list)
+  material2<-gsub('([:.:])([:":])([:,:])','."',material2)
+  material2<-data.frame(material2)
+  br4<-rep(c("]}],"),each=nrow(fnqitem))
+  fdat2<-data.frame(br1,nf,item2,br2,task,s,br3,material2,br4)
+  fdat2<-fdat2 %>% mutate_all(na_if,"")
+  fdat2<-fdat2 %>% select_if(all_na)
+  
+  colnames(fdat2)<-1:ncol(fdat2)
+  fdat2[is.na(fdat2)] <- " "
+  
+  fdat<-dplyr::bind_rows(fdat,fdat2)
+  fdat[is.na(fdat)] <- " "
+}
+
+fdat[is.na(fdat)] <- " "
+write.table(fdat,"spr_indiv_f.js",quote=FALSE,row.names=FALSE,col.names=FALSE)
+
+
+}
+
+
+maze_indiv_ex<-function(material=NULL,
+               number_of_condition=NULL,
+               name_of_experimental_material=NULL,
+               startfrom=NULL){
+  
+  n<-1:ncol(material)
+  colnames(material)<-paste("c",n,sep="")
+  
+  sitem<-material[material$c1=="s:",]
+  sitem$c1<-NULL
+  sset<-nrow(sitem)/number_of_condition
+  br1<-rep(c("[["),each=nrow(sitem))
+  ncond2<-rep(c(1:number_of_condition),times=sset)
+  cond<-paste(name_of_experimental_material,ncond2,sep="")
+  cond<-gsub('^','"',cond)
+  cond<-gsub('$','",',cond)
+  item<-as.character(rep(c(startfrom:(sset+startfrom-1)),each=number_of_condition))
+  br2<-rep(c("],"),each=nrow(sitem))
+  nmOftask<-"Maze"
+  nmOftask<-gsub('^','"',nmOftask)
+  nmOftask<-gsub('$','",',nmOftask)
+  task<-rep(c(nmOftask),each=nrow(sitem))
+  se<-rep(c("{s:"),each=nrow(sitem))
+  
+  list<-matrix(rep(NA,nrow(sitem)*ncol(sitem)),ncol=ncol(sitem))
+  for (j in 1:nrow(sitem)){
+    d1<-sitem[j,]
+    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% select_if(all_na)
+    s<-dim(d1)[1]
+    s<-d1[[s]]
+    s<-as.character(s)
+    s<-gsub('^','"',s)
+    e<-dim(d1)[2]
+    e<-d1[[e]]
+    e<-as.character(e)
+    e<-gsub('$','"',e)
+    d2<-d1
+    d2<-d2[-dim(d2)[1]]
+    d2<-d2[-dim(d2)[2]]
+    d1<-cbind(s,d2,e)
+    
+    for (i in 1:dim(d1)[2]){
+      list[j,i]<-d1[[i]]
+    }
+  }
+  sitem<-ifelse(list=='"",'|list=='""',"",list)
+  sitem<-gsub('([:.:])([:":])([:,:])','."',sitem)
+  sitem<-data.frame(sitem)
+  
+  comma=rep(c(","),times=nrow(sitem))
+  
+  a<-rep(c("a:"),each=nrow(sitem))
+  smitem<-material[material$c1=="sm:",]
+  smitem$c1<-NULL
+  list<-matrix(rep(NA,nrow(smitem)*ncol(smitem)),ncol=ncol(smitem))
+  for (j in 1:nrow(smitem)){
+    d1<-smitem[j,]
+    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% select_if(all_na)
+    s<-dim(d1)[1]
+    s<-d1[[s]]
+    s<-as.character(s)
+    s<-gsub('^','"',s)
+    e<-dim(d1)[2]
+    e<-d1[[e]]
+    e<-as.character(e)
+    e<-gsub('$','"',e)
+    d2<-d1
+    d2<-d2[-dim(d2)[1]]
+    d2<-d2[-dim(d2)[2]]
+    d1<-cbind(s,d2,e)
+    
+    for (i in 1:dim(d1)[2]){
+      list[j,i]<-d1[[i]]
+    }
+  }
+  smitem<-ifelse(list=='"",'|list=='""',"",list)
+  smitem<-gsub('([:.:])([:":])([:,:])','."',smitem)
+  smitem<-data.frame(smitem)
+  
+  br4<-rep(c("}],"),each=nrow(sitem))
+  sdat<-data.frame(br1,cond,item,br2,task,se,sitem,comma,a,smitem,br4)
+  sdat<-sdat %>% mutate_all(na_if,"")
+  sdat<-sdat %>% select_if(all_na)
+  colnames(sdat)<-1:ncol(sdat)
+  sdat[is.na(sdat)] <- " "
+  write.table(sdat,"maze_indiv_ex.js",quote=FALSE,row.names=FALSE,col.names=FALSE)
+}
+
+
+maze_indiv_f<-function(material=NULL,
+                      name_of_filler=NULL,
+                      startfrom=NULL){
+  
+  n<-1:ncol(material)
+  colnames(material)<-paste("c",n,sep="")
+  
+  fitem<-material[material$c1=="f:",]
+  fitem$c1<-NULL
+  
+  br1<-rep(c("[["),each=nrow(fitem))
+  nf<-rep(c(name_of_filler),nrow(fitem))
+  nf<-gsub('^','"',nf)
+  nf<-gsub('$','",',nf)
+  item<-as.character(rep(c(startfrom:(nrow(fitem)+startfrom-1))))
+  br2<-rep(c("],"),each=nrow(fitem))
+  nmOftask<-"Maze"
+  nmOftask<-gsub('^','"',nmOftask)
+  nmOftask<-gsub('$','",',nmOftask)
+  task<-rep(c(nmOftask),each=nrow(fitem))
+  se<-rep(c("{s:"),each=nrow(fitem))
+  
+  list<-matrix(rep(NA,nrow(fitem)*ncol(fitem)),ncol=ncol(fitem))
+  for (j in 1:nrow(fitem)){
+    d1<-fitem[j,]
+    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% select_if(all_na)
+    s<-dim(d1)[1]
+    s<-d1[[s]]
+    s<-as.character(s)
+    s<-gsub('^','"',s)
+    e<-dim(d1)[2]
+    e<-d1[[e]]
+    e<-as.character(e)
+    e<-gsub('$','"',e)
+    d2<-d1
+    d2<-d2[-dim(d2)[1]]
+    d2<-d2[-dim(d2)[2]]
+    d1<-cbind(s,d2,e)
+    
+    for (i in 1:dim(d1)[2]){
+      list[j,i]<-d1[[i]]
+    }
+  }
+  fitem<-ifelse(list=='"",'|list=='""',"",list)
+  fitem<-gsub('([:.:])([:":])([:,:])','."',fitem)
+  fitem<-data.frame(fitem)
+  
+  comma=rep(c(","),times=nrow(fitem))
+  
+  a<-rep(c("a:"),each=nrow(fitem))
+  fmitem<-material[material$c1=="fm:",]
+  fmitem$c1<-NULL
+  
+  list<-matrix(rep(NA,nrow(fitem)*ncol(fmitem)),ncol=ncol(fmitem))
+  for (j in 1:nrow(fmitem)){
+    d1<-fmitem[j,]
+    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% select_if(all_na)
+    s<-dim(d1)[1]
+    s<-d1[[s]]
+    s<-as.character(s)
+    s<-gsub('^','"',s)
+    e<-dim(d1)[2]
+    e<-d1[[e]]
+    e<-as.character(e)
+    e<-gsub('$','"',e)
+    d2<-d1
+    d2<-d2[-dim(d2)[1]]
+    d2<-d2[-dim(d2)[2]]
+    d1<-cbind(s,d2,e)
+    
+    for (i in 1:dim(d1)[2]){
+      list[j,i]<-d1[[i]]
+    }
+  }
+  fmitem<-ifelse(list=='"",'|list=='""',"",list)
+  fmitem<-gsub('([:.:])([:":])([:,:])','."',fmitem)
+  fmitem<-data.frame(fmitem)
+  
+  br4<-rep(c("}],"),each=nrow(fitem))
+  
+  fdat<-data.frame(br1,nf,item,br2,task,se,fitem,comma,a,fmitem,br4)
+  
+  fdat<-fdat %>% mutate_all(na_if,"")
+  fdat<-fdat %>% select_if(all_na)
+  colnames(fdat)<-1:ncol(fdat)
+  
+  fdat[is.na(fdat)] <- " "
+  
+  fdat[is.na(fdat)] <- " "
+  write.table(fdat,"maze_indiv_f.js",quote=FALSE,row.names=FALSE,col.names=FALSE)
+  
+}
+
+
+cq_indiv_ex<-function(material=NULL,
+                      number_of_condition=NULL,
+                      name_of_experimental_material=NULL,
+                      startfrom=NULL){
+  
+  n<-1:ncol(material)
+  colnames(material)<-paste("c",n,sep="")
+  
+  sitem<-material[material$c1=="s:",]
+  sitem$c1<-NULL
+  sset<-nrow(sitem)/number_of_condition
+  br1<-rep(c("[["),each=nrow(sitem))
+  ncond2<-rep(c(1:number_of_condition),times=sset)
+  cond<-paste(name_of_experimental_material,ncond2,sep="")
+  cond<-gsub('^','"',cond)
+  cond<-gsub('$','",',cond)
+  item<-as.character(rep(c(startfrom:(sset+startfrom-1)),each=number_of_condition))
+  br2<-rep(c("],"),each=nrow(sitem))
+  nmOftask<-"DashedSentence"
+  nmOftask<-gsub('^','"',nmOftask)
+  nmOftask<-gsub('$','",',nmOftask)
+  task<-rep(c(nmOftask),each=nrow(sitem))
+  se<-rep(c("{s:"),each=nrow(sitem))
+  br3<-rep(c("["),each=nrow(sitem))
+  list<-matrix(rep(NA,nrow(sitem)*ncol(sitem)),ncol=ncol(sitem))
+  for (j in 1:nrow(sitem)){
+    d1<-sitem[j,]
+    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% select_if(all_na)
+    s<-dim(d1)[1]
+    s<-d1[[s]]
+    s<-as.character(s)
+    s<-gsub('^','"',s)
+    e<-dim(d1)[2]
+    e<-d1[[e]]
+    e<-as.character(e)
+    e<-gsub('$','"',e)
+    d2<-d1
+    d2<-d2[-dim(d2)[1]]
+    d2<-d2[-dim(d2)[2]]
+    d1<-cbind(s,d2,e)
+    
+    for (i in 1:dim(d1)[2]){
+      list[j,i]<-d1[[i]]
+    }
+  }
+  sitem<-ifelse(list=='"",'|list=='""',"",list)
+  sitem<-gsub('([:.:])([:":])([:,:])','."',sitem)
+  material2<-data.frame(sitem)
+  br4<-rep(c("]},"),each=nrow(sitem))
+  nmOfq<-"Question"
+  nmOfq<-gsub('^','"',nmOfq)
+  nmOfq<-gsub('$','",',nmOfq)
+  cq<-rep(c(nmOfq),each=nrow(sitem))
+  br5<-rep(c("{q:"),each=nrow(sitem))
+  
+  question<-material[material$c1=="sq:",]
+  question$c1<-NULL
+  qs=rep(c("a"),times=nrow(question))
+  qe=rep(c("z"),times=nrow(question))
+  qs<-gsub('^a','"',qs)
+  qe<-gsub('z$','",',qe)
+  question<-cbind(qs,question,qe)
+  
+  as<-rep(c("as:["),each=nrow(sitem))
+  
+  qoption<-material[material$c1=="so:",]
+  qoption$c1<-NULL
+  list<-matrix(rep(NA,nrow(qoption)*ncol(qoption)),ncol=ncol(qoption))
+  for (j in 1:ncol(qoption)){
+    d1<-qoption[j]
+    d1<-as.character(t(d1))
+    d1<-gsub(',','","',d1)
+    list[,j]<-d1
+  }
+  qoption<-ifelse(list=='"",'|list=='""',"",list)
+  qoption<-gsub('([:.:])([:":])([:,:])','."',qoption)
+  qoption<-data.frame(qoption)
+  qs=rep(c("a"),times=nrow(question))
+  qe=rep(c("z"),times=nrow(question))
+  qs<-gsub('^a','"',qs)
+  qe<-gsub('z$','"',qe)
+  qoption<-cbind(qs,qoption,qe)
+  qoption<-qoption %>% mutate_all(na_if,"")
+  qoption<-qoption %>% select_if(all_na)
+  
+  list<-matrix(rep(NA,nrow(qoption)*ncol(qoption)),ncol=ncol(qoption))
+  for (j in 1:nrow(qoption)){
+    d1<-qoption[j,]
+    d1<-d1 %>% select_if(all_na)
+    d1<-as.matrix(d1)
+    list[j,1:dim(d1)[2]]<-d1[1:dim(d1)[2]]
+  }
+  qoption<-ifelse(list=='"",'|list=='""',"",list)
+  qoption<-gsub('([:.:])([:":])([:,:])','."',qoption)
+  qoption<-data.frame(qoption)
+  
+  correct_response<-material[material$c1=="sco:",]
+  correct_response$c1<-NULL
+  qs=rep(c("a"),times=nrow(correct_response))
+  qe=rep(c("z"),times=nrow(correct_response))
+  qs<-gsub('^a','"',qs)
+  qe<-gsub('z$','"',qe)
+  correct_response<-cbind(qs,correct_response,qe)
+  correct_response<-correct_response %>% mutate_all(na_if,"")
+  correct_response<-correct_response %>% select_if(all_na)
+  list<-matrix(rep(NA,nrow(correct_response)*ncol(correct_response)),ncol=ncol(correct_response))
+  for (j in 1:nrow(correct_response)){
+    d1<-correct_response[j,]
+    d1<-d1 %>% select_if(all_na)
+    d1<-as.matrix(d1)
+    list[j,1:dim(d1)[2]]<-d1[1:dim(d1)[2]]
+  }
+  correct_response<-ifelse(list=='"",'|list=='""',"",list)
+  correct_response<-gsub('([:.:])([:":])([:,:])','."',correct_response)
+  correct_response<-data.frame(correct_response)
+  
+  br6<-rep(c("], hasCorrect:"),each=nrow(sitem))
+  br7<-rep(c("}],"),each=nrow(sitem))
+  sdat<-data.frame(br1,cond,item,br2,task,se,br3,material2,br4,cq,br5,question,as,qoption,br6,correct_response,br7)
+  sdat<-sdat %>% mutate_all(na_if,"")
+  sdat<-sdat %>% select_if(all_na)
+  colnames(sdat)<-1:ncol(sdat)
+  sdat[is.na(sdat)] <- " "
+  write.table(sdat,"cq_indiv_ex.js",quote=FALSE,row.names=FALSE,col.names=FALSE)
+}
+
+
+cq_indiv_f<-function(material=NULL,
+                     name_of_filler=NULL,
+                     startfrom=NULL){
+  
+  n<-1:ncol(material)
+  colnames(material)<-paste("c",n,sep="")
+  
+  fitem<-material[material$c1=="f:",]
+  fitem$c1<-NULL
+  br1<-rep(c("[["),each=nrow(fitem))
+  nf<-rep(c(name_of_filler),nrow(fitem))
+  nf<-gsub('^','"',nf)
+  nf<-gsub('$','",',nf)
+  item<-as.character(rep(c(startfrom:(nrow(fitem)+startfrom-1))))  
+  br2<-rep(c("],"),each=nrow(fitem))
+  nmOftask<-"DashedSentence"
+  nmOftask<-gsub('^','"',nmOftask)
+  nmOftask<-gsub('$','",',nmOftask)
+  task<-rep(c(nmOftask),each=nrow(fitem))
+  se<-rep(c("{s:"),each=nrow(fitem))
+  br3<-rep(c("["),each=nrow(fitem))
+  
+  list<-matrix(rep(NA,nrow(fitem)*ncol(fitem)),ncol=ncol(fitem))
+  for (j in 1:nrow(fitem)){
+    d1<-fitem[j,]
+    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% select_if(all_na)
+    s<-dim(d1)[1]
+    s<-d1[[s]]
+    s<-as.character(s)
+    s<-gsub('^','"',s)
+    e<-dim(d1)[2]
+    e<-d1[[e]]
+    e<-as.character(e)
+    e<-gsub('$','"',e)
+    d2<-d1
+    d2<-d2[-dim(d2)[1]]
+    d2<-d2[-dim(d2)[2]]
+    d1<-cbind(s,d2,e)
+    
+    for (i in 1:dim(d1)[2]){
+      list[j,i]<-d1[[i]]
+    }
+  }
+  fitem<-ifelse(list=='"",'|list=='""',"",list)
+  fitem<-gsub('([:.:])([:":])([:,:])','."',fitem)
+  material2<-data.frame(fitem)
+  
+  br4<-rep(c("]},"),each=nrow(fitem))
+  nmOfq<-"Question"
+  nmOfq<-gsub('^','"',nmOfq)
+  nmOfq<-gsub('$','",',nmOfq)
+  cq<-rep(c(nmOfq),each=nrow(fitem))
+  br5<-rep(c("{q:"),each=nrow(fitem))
+  question<-material[material$c1=="fq:",]
+  question$c1<-NULL
+  qs=rep(c("a"),times=nrow(question))
+  qe=rep(c("z"),times=nrow(question))
+  qs<-gsub('^a','"',qs)
+  qe<-gsub('z$','",',qe)
+  question<-cbind(qs,question,qe)
+  as<-rep(c("as:["),each=nrow(fitem))
+  
+  qoption<-material[material$c1=="fo:",]
+  qoption$c1<-NULL
+  list<-matrix(rep(NA,nrow(qoption)*ncol(qoption)),ncol=ncol(qoption))
+  for (j in 1:ncol(qoption)){
+    d1<-qoption[j]
+    d1<-as.character(t(d1))
+    d1<-gsub(',','","',d1)
+    list[,j]<-d1
+  }
+  qoption<-ifelse(list=='"",'|list=='""',"",list)
+  qoption<-gsub('([:.:])([:":])([:,:])','."',qoption)
+  qoption<-data.frame(qoption)
+  qs=rep(c("a"),times=nrow(question))
+  qe=rep(c("z"),times=nrow(question))
+  qs<-gsub('^a','"',qs)
+  qe<-gsub('z$','"',qe)
+  qoption<-cbind(qs,qoption,qe)
+  qoption<-qoption %>% mutate_all(na_if,"")
+  qoption<-qoption %>% select_if(all_na)
+  
+  list<-matrix(rep(NA,nrow(qoption)*ncol(qoption)),ncol=ncol(qoption))
+  for (j in 1:nrow(qoption)){
+    d1<-qoption[j,]
+    d1<-d1 %>% select_if(all_na)
+    d1<-as.matrix(d1)
+    list[j,1:dim(d1)[2]]<-d1[1:dim(d1)[2]]
+  }
+  qoption<-ifelse(list=='"",'|list=='""',"",list)
+  qoption<-gsub('([:.:])([:":])([:,:])','."',qoption)
+  qoption<-data.frame(qoption)
+  
+  correct_response<-material[material$c1=="fco:",]
+  correct_response$c1<-NULL
+  qs=rep(c("a"),times=nrow(correct_response))
+  qe=rep(c("z"),times=nrow(correct_response))
+  qs<-gsub('^a','"',qs)
+  qe<-gsub('z$','"',qe)
+  correct_response<-cbind(qs,correct_response,qe)
+  correct_response<-correct_response %>% mutate_all(na_if,"")
+  correct_response<-correct_response %>% select_if(all_na)
+  list<-matrix(rep(NA,nrow(correct_response)*ncol(correct_response)),ncol=ncol(correct_response))
+  for (j in 1:nrow(correct_response)){
+    d1<-correct_response[j,]
+    d1<-d1 %>% select_if(all_na)
+    d1<-as.matrix(d1)
+    list[j,1:dim(d1)[2]]<-d1[1:dim(d1)[2]]
+  }
+  correct_response<-ifelse(list=='"",'|list=='""',"",list)
+  correct_response<-gsub('([:.:])([:":])([:,:])','."',correct_response)
+  correct_response<-data.frame(correct_response)
+  
+  br6<-rep(c("], hasCorrect:"),each=nrow(fitem))
+  br7<-rep(c("}],"),each=nrow(fitem))
+  
+  fdat<-data.frame(br1,nf,item,br2,task,se,br3,material2,br4,cq,br5,question,as,qoption,br6,correct_response,br7)
+  
+  fdat<-fdat %>% mutate_all(na_if,"")
+  fdat<-fdat %>% select_if(all_na)
+  colnames(fdat)<-1:ncol(fdat)
+  fdat[is.na(fdat)] <- " "
+  
+  if(nrow(material[material$c1=="fnq:",])>0){
+    
+    fnqitem<-material[material$c1=="fnq:",]
+    fnqitem$c1<-NULL
+    
+    br1<-rep(c("[["),each=nrow(fnqitem))
+    nf<-rep(c(name_of_filler),nrow(fnqitem))
+    nf<-gsub('^','"',nf)
+    nf<-gsub('$','",',nf)
+    item2<-as.numeric(item)
+    item2<-as.character((max(item2)+1):(max(item2)+nrow(fnqitem)))
+    br2<-rep(c("],"),each=nrow(fnqitem))
+    nmOftask<-"DashedSentence"
+    nmOftask<-gsub('^','"',nmOftask)
+    nmOftask<-gsub('$','",',nmOftask)
+    task<-rep(c(nmOftask),each=nrow(fnqitem))
+    se<-rep(c("{s:"),each=nrow(fnqitem))
+    br3<-rep(c("["),each=nrow(fnqitem))
+    
+    list<-matrix(rep(NA,nrow(fnqitem)*ncol(fnqitem)),ncol=ncol(fnqitem))
+    for (j in 1:nrow(fnqitem)){
+      d1<-fnqitem[j,]
+      d1<-d1 %>% mutate_all(na_if,"")
+      d1<-d1 %>% select_if(all_na)
+      s<-dim(d1)[1]
+      s<-d1[[s]]
+      s<-as.character(s)
+      s<-gsub('^','"',s)
+      e<-dim(d1)[2]
+      e<-d1[[e]]
+      e<-as.character(e)
+      e<-gsub('$','"',e)
+      d2<-d1
+      d2<-d2[-dim(d2)[1]]
+      d2<-d2[-dim(d2)[2]]
+      d1<-cbind(s,d2,e)
+      
+      for (i in 1:dim(d1)[2]){
+        list[j,i]<-d1[[i]]
+      }
+    }
+    fnqitem<-ifelse(list=='"",'|list=='""',"",list)
+    fnqitem<-gsub('([:.:])([:":])([:,:])','."',fnqitem)
+    material2<-data.frame(fnqitem)
+    
+    br4<-rep(c("]}],"),each=nrow(fnqitem))
+    fdat2<-data.frame(br1,nf,item2,br2,task,se,br3,material2,br4)
+    fdat2<-fdat2 %>% mutate_all(na_if,"")
+    fdat2<-fdat2 %>% select_if(all_na)
+    
+    colnames(fdat2)<-1:ncol(fdat2)
+    fdat2[is.na(fdat2)] <- " "
+    
+    fdat<-dplyr::bind_rows(fdat,fdat2)
+    fdat[is.na(fdat)] <- " "
+  }
+  
+  fdat[is.na(fdat)] <- " "
+  write.table(fdat,"cq_indiv_f.js",quote=FALSE,row.names=FALSE,col.names=FALSE)
   
   
 }
