@@ -323,7 +323,7 @@ spr<-function(controller=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   qoption<-cbind(qs,qoption,qe)
-  qoption<-qoption %>% mutate_all(na_if,"")
+  qoption<-qoption %>% mutate_if(is.character, na_if, "")
   qoption<-qoption %>% select_if(all_na)
   
   list<-matrix(rep(NA,nOfrow*ncol(qoption)),ncol=ncol(qoption))
@@ -339,7 +339,7 @@ spr<-function(controller=NULL,
   
   br6<-rep(c("]}],"),each=nrow(pitem))
   pdat<-data.frame(br1,nf,task,s,br3,material2,br4,cq,br5,question,as,qoption,br6)
-  pdat<-pdat %>% mutate_all(na_if,"")
+  pdat<-pdat %>% mutate_if(is.character, na_if, "")
   pdat<-pdat %>% select_if(all_na)
   colnames(pdat)<-1:ncol(pdat)
   pdat
@@ -410,7 +410,7 @@ spr<-function(controller=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   qoption<-cbind(qs,qoption,qe)
-  qoption<-qoption %>% mutate_all(na_if,"")
+  qoption<-qoption %>% mutate_if(is.character, na_if, "")
   qoption<-qoption %>% select_if(all_na)
   
   list<-matrix(rep(NA,nOfrow*ncol(qoption)),ncol=ncol(qoption))
@@ -431,7 +431,7 @@ spr<-function(controller=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   correct_response<-cbind(qs,correct_response,qe)
-  correct_response<-correct_response %>% mutate_all(na_if,"")
+  correct_response<-correct_response %>% mutate_if(is.character, na_if, "")
   correct_response<-correct_response %>% select_if(all_na)
   list<-matrix(rep(NA,nOfrow*ncol(correct_response)),ncol=ncol(correct_response))
   for (j in 1:nrow(correct_response)){
@@ -447,7 +447,7 @@ spr<-function(controller=NULL,
   br6<-rep(c("], hasCorrect:"),each=nrow(sitem))
   br7<-rep(c("}],"),each=nrow(sitem))
   sdat<-data.frame(br1,cond,item,br2,task,s,br3,material2,br4,cq,br5,question,as,qoption,br6,correct_response,br7)
-  sdat<-sdat %>% mutate_all(na_if,"")
+  sdat<-sdat %>% mutate_if(is.character, na_if, "")
   sdat<-sdat %>% select_if(all_na)
   colnames(sdat)<-1:ncol(sdat)
   sdat
@@ -513,7 +513,7 @@ spr<-function(controller=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   qoption<-cbind(qs,qoption,qe)
-  qoption<-qoption %>% mutate_all(na_if,"")
+  qoption<-qoption %>% mutate_if(is.character, na_if, "")
   qoption<-qoption %>% select_if(all_na)
   
   list<-matrix(rep(NA,nOfrow*ncol(qoption)),ncol=ncol(qoption))
@@ -534,7 +534,7 @@ spr<-function(controller=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   correct_response<-cbind(qs,correct_response,qe)
-  correct_response<-correct_response %>% mutate_all(na_if,"")
+  correct_response<-correct_response %>% mutate_if(is.character, na_if, "")
   correct_response<-correct_response %>% select_if(all_na)
   list<-matrix(rep(NA,nOfrow*ncol(correct_response)),ncol=ncol(correct_response))
   for (j in 1:nrow(correct_response)){
@@ -552,7 +552,7 @@ spr<-function(controller=NULL,
   
   fdat<-data.frame(br1,nf,item,br2,task,s,br3,material2,br4,cq,br5,question,as,qoption,br6,correct_response,br7)
   
-  fdat<-fdat %>% mutate_all(na_if,"")
+  fdat<-fdat %>% mutate_if(is.character, na_if, "")
   fdat<-fdat %>% select_if(all_na)
   colnames(fdat)<-1:ncol(fdat)
   
@@ -596,7 +596,7 @@ spr<-function(controller=NULL,
     material2<-data.frame(material2)
     br4<-rep(c("]}],"),each=nrow(fnqitem))
     fdat2<-data.frame(br1,nf,item2,br2,task,s,br3,material2,br4)
-    fdat2<-fdat2 %>% mutate_all(na_if,"")
+    fdat2<-fdat2 %>% mutate_if(is.character, na_if, "")
     fdat2<-fdat2 %>% select_if(all_na)
     
     colnames(fdat2)<-1:ncol(fdat2)
@@ -641,7 +641,7 @@ maze<-function(controller=NULL,
   list<-matrix(rep(NA,nrow(pitem)*ncol(pitem)),ncol=ncol(pitem))
   for (j in 1:nrow(pitem)){
     d1<-pitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -672,7 +672,7 @@ maze<-function(controller=NULL,
   list<-matrix(rep(NA,nrow(pmitem)*ncol(pmitem)),ncol=ncol(pmitem))
   for (j in 1:nrow(pmitem)){
     d1<-pmitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -697,7 +697,7 @@ maze<-function(controller=NULL,
   
   br4<-rep(c("}],"),each=nrow(pitem))
   pdat<-data.frame(br1,nf,task,se,pitem,comma,a,pmitem,br4)
-  pdat<-pdat %>% mutate_all(na_if,"")
+  pdat<-pdat %>% mutate_if(is.character, na_if, "")
   pdat<-pdat %>% select_if(all_na)
   colnames(pdat)<-1:ncol(pdat)
   pdat
@@ -724,7 +724,7 @@ maze<-function(controller=NULL,
   list<-matrix(rep(NA,nrow(sitem)*ncol(sitem)),ncol=ncol(sitem))
   for (j in 1:nrow(sitem)){
     d1<-sitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -755,7 +755,7 @@ maze<-function(controller=NULL,
   list<-matrix(rep(NA,nrow(smitem)*ncol(smitem)),ncol=ncol(smitem))
   for (j in 1:nrow(smitem)){
     d1<-smitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -780,7 +780,7 @@ maze<-function(controller=NULL,
   
   br4<-rep(c("}],"),each=nrow(sitem))
   sdat<-data.frame(br1,cond,item,br2,task,se,sitem,comma,a,smitem,br4)
-  sdat<-sdat %>% mutate_all(na_if,"")
+  sdat<-sdat %>% mutate_if(is.character, na_if, "")
   sdat<-sdat %>% select_if(all_na)
   colnames(sdat)<-1:ncol(sdat)
   sdat
@@ -803,7 +803,7 @@ maze<-function(controller=NULL,
   list<-matrix(rep(NA,nrow(fitem)*ncol(fitem)),ncol=ncol(fitem))
   for (j in 1:nrow(fitem)){
     d1<-fitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -835,7 +835,7 @@ maze<-function(controller=NULL,
   list<-matrix(rep(NA,nrow(fitem)*ncol(fmitem)),ncol=ncol(fmitem))
   for (j in 1:nrow(fmitem)){
     d1<-fmitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -862,7 +862,7 @@ maze<-function(controller=NULL,
   
   fdat<-data.frame(br1,nf,item,br2,task,se,fitem,comma,a,fmitem,br4)
   
-  fdat<-fdat %>% mutate_all(na_if,"")
+  fdat<-fdat %>% mutate_if(is.character, na_if, "")
   fdat<-fdat %>% select_if(all_na)
   colnames(fdat)<-1:ncol(fdat)
   
@@ -903,7 +903,7 @@ cq<-function(controller=NULL,
   list<-matrix(rep(NA,nrow(pitem)*ncol(pitem)),ncol=ncol(pitem))
   for (j in 1:nrow(pitem)){
     d1<-pitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -957,7 +957,7 @@ cq<-function(controller=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   qoption<-cbind(qs,qoption,qe)
-  qoption<-qoption %>% mutate_all(na_if,"")
+  qoption<-qoption %>% mutate_if(is.character, na_if, "")
   qoption<-qoption %>% select_if(all_na)
   
   list<-matrix(rep(NA,nrow(qoption)*ncol(qoption)),ncol=ncol(qoption))
@@ -973,7 +973,7 @@ cq<-function(controller=NULL,
   
   br6<-rep(c("]}],"),each=nrow(pitem))
   pdat<-data.frame(br1,nf,task,se,br3,material2,br4,cq,br5,question,as,qoption,br6)
-  pdat<-pdat %>% mutate_all(na_if,"")
+  pdat<-pdat %>% mutate_if(is.character, na_if, "")
   pdat<-pdat %>% select_if(all_na)
   colnames(pdat)<-1:ncol(pdat)
   pdat
@@ -998,7 +998,7 @@ cq<-function(controller=NULL,
   list<-matrix(rep(NA,nrow(sitem)*ncol(sitem)),ncol=ncol(sitem))
   for (j in 1:nrow(sitem)){
     d1<-sitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -1054,7 +1054,7 @@ cq<-function(controller=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   qoption<-cbind(qs,qoption,qe)
-  qoption<-qoption %>% mutate_all(na_if,"")
+  qoption<-qoption %>% mutate_if(is.character, na_if, "")
   qoption<-qoption %>% select_if(all_na)
   
   list<-matrix(rep(NA,nrow(qoption)*ncol(qoption)),ncol=ncol(qoption))
@@ -1075,7 +1075,7 @@ cq<-function(controller=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   correct_response<-cbind(qs,correct_response,qe)
-  correct_response<-correct_response %>% mutate_all(na_if,"")
+  correct_response<-correct_response %>% mutate_if(is.character, na_if, "")
   correct_response<-correct_response %>% select_if(all_na)
   list<-matrix(rep(NA,nrow(correct_response)*ncol(correct_response)),ncol=ncol(correct_response))
   for (j in 1:nrow(correct_response)){
@@ -1091,7 +1091,7 @@ cq<-function(controller=NULL,
   br6<-rep(c("], hasCorrect:"),each=nrow(sitem))
   br7<-rep(c("}],"),each=nrow(sitem))
   sdat<-data.frame(br1,cond,item,br2,task,se,br3,material2,br4,cq,br5,question,as,qoption,br6,correct_response,br7)
-  sdat<-sdat %>% mutate_all(na_if,"")
+  sdat<-sdat %>% mutate_if(is.character, na_if, "")
   sdat<-sdat %>% select_if(all_na)
   colnames(sdat)<-1:ncol(sdat)
   sdat
@@ -1116,7 +1116,7 @@ cq<-function(controller=NULL,
   list<-matrix(rep(NA,nrow(fitem)*ncol(fitem)),ncol=ncol(fitem))
   for (j in 1:nrow(fitem)){
     d1<-fitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -1171,7 +1171,7 @@ cq<-function(controller=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   qoption<-cbind(qs,qoption,qe)
-  qoption<-qoption %>% mutate_all(na_if,"")
+  qoption<-qoption %>% mutate_if(is.character, na_if, "")
   qoption<-qoption %>% select_if(all_na)
   
   list<-matrix(rep(NA,nrow(qoption)*ncol(qoption)),ncol=ncol(qoption))
@@ -1192,7 +1192,7 @@ cq<-function(controller=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   correct_response<-cbind(qs,correct_response,qe)
-  correct_response<-correct_response %>% mutate_all(na_if,"")
+  correct_response<-correct_response %>% mutate_if(is.character, na_if, "")
   correct_response<-correct_response %>% select_if(all_na)
   list<-matrix(rep(NA,nrow(correct_response)*ncol(correct_response)),ncol=ncol(correct_response))
   for (j in 1:nrow(correct_response)){
@@ -1210,7 +1210,7 @@ cq<-function(controller=NULL,
   
   fdat<-data.frame(br1,nf,item,br2,task,se,br3,material2,br4,cq,br5,question,as,qoption,br6,correct_response,br7)
   
-  fdat<-fdat %>% mutate_all(na_if,"")
+  fdat<-fdat %>% mutate_if(is.character, na_if, "")
   fdat<-fdat %>% select_if(all_na)
   colnames(fdat)<-1:ncol(fdat)
   
@@ -1242,7 +1242,7 @@ cq<-function(controller=NULL,
     list<-matrix(rep(NA,nrow(fnqitem)*ncol(fnqitem)),ncol=ncol(fnqitem))
     for (j in 1:nrow(fnqitem)){
       d1<-fnqitem[j,]
-      d1<-d1 %>% mutate_all(na_if,"")
+      d1<-d1 %>% mutate_if(is.character, na_if, "")
       d1<-d1 %>% select_if(all_na)
       s<-dim(d1)[1]
       s<-d1[[s]]
@@ -1267,7 +1267,7 @@ cq<-function(controller=NULL,
     
     br4<-rep(c("]}],"),each=nrow(fnqitem))
     fdat2<-data.frame(br1,nf,item2,br2,task,se,br3,material2,br4)
-    fdat2<-fdat2 %>% mutate_all(na_if,"")
+    fdat2<-fdat2 %>% mutate_if(is.character, na_if, "")
     fdat2<-fdat2 %>% select_if(all_na)
     
     colnames(fdat2)<-1:ncol(fdat2)
@@ -1358,7 +1358,7 @@ spr_indiv_ex<-function(material=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   qoption<-cbind(qs,qoption,qe)
-  qoption<-qoption %>% mutate_all(na_if,"")
+  qoption<-qoption %>% mutate_if(is.character, na_if, "")
   qoption<-qoption %>% select_if(all_na)
   list<-matrix(rep(NA,nOfrow*ncol(qoption)),ncol=ncol(qoption))
   for (j in 1:nrow(qoption)){
@@ -1392,7 +1392,7 @@ spr_indiv_ex<-function(material=NULL,
   br6<-rep(c("], hasCorrect:"),each=nrow(sitem))
   br7<-rep(c("}],"),each=nrow(sitem))
   sdat<-data.frame(br1,cond,item,br2,task,s,br3,material2,br4,cq,br5,question,as,qoption,br6,correct_response,br7)
-  sdat<-sdat %>% mutate_all(na_if,"")
+  sdat<-sdat %>% mutate_if(is.character, na_if, "")
   sdat<-sdat %>% select_if(all_na)
   colnames(sdat)<-1:ncol(sdat)
   
@@ -1468,7 +1468,7 @@ qe=rep(c("z"),times=nrow(question))
 qs<-gsub('^a','"',qs)
 qe<-gsub('z$','"',qe)
 qoption<-cbind(qs,qoption,qe)
-qoption<-qoption %>% mutate_all(na_if,"")
+qoption<-qoption %>% mutate_if(is.character, na_if, "")
 qoption<-qoption %>% select_if(all_na)
 
 list<-matrix(rep(NA,nOfrow*ncol(qoption)),ncol=ncol(qoption))
@@ -1489,7 +1489,7 @@ qe=rep(c("z"),times=nrow(correct_response))
 qs<-gsub('^a','"',qs)
 qe<-gsub('z$','"',qe)
 correct_response<-cbind(qs,correct_response,qe)
-correct_response<-correct_response %>% mutate_all(na_if,"")
+correct_response<-correct_response %>% mutate_if(is.character, na_if, "")
 correct_response<-correct_response %>% select_if(all_na)
 list<-matrix(rep(NA,nOfrow*ncol(correct_response)),ncol=ncol(correct_response))
 for (j in 1:nrow(correct_response)){
@@ -1507,7 +1507,7 @@ br7<-rep(c("}],"),each=nrow(fitem))
 
 fdat<-data.frame(br1,nf,item,br2,task,s,br3,material2,br4,cq,br5,question,as,qoption,br6,correct_response,br7)
 
-fdat<-fdat %>% mutate_all(na_if,"")
+fdat<-fdat %>% mutate_if(is.character, na_if, "")
 fdat<-fdat %>% select_if(all_na)
 colnames(fdat)<-1:ncol(fdat)
 
@@ -1545,7 +1545,7 @@ if(nrow(material[material$c1=="fnq:",])>0){
   material2<-data.frame(material2)
   br4<-rep(c("]}],"),each=nrow(fnqitem))
   fdat2<-data.frame(br1,nf,item2,br2,task,s,br3,material2,br4)
-  fdat2<-fdat2 %>% mutate_all(na_if,"")
+  fdat2<-fdat2 %>% mutate_if(is.character, na_if, "")
   fdat2<-fdat2 %>% select_if(all_na)
   
   colnames(fdat2)<-1:ncol(fdat2)
@@ -1589,7 +1589,7 @@ maze_indiv_ex<-function(material=NULL,
   list<-matrix(rep(NA,nrow(sitem)*ncol(sitem)),ncol=ncol(sitem))
   for (j in 1:nrow(sitem)){
     d1<-sitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -1620,7 +1620,7 @@ maze_indiv_ex<-function(material=NULL,
   list<-matrix(rep(NA,nrow(smitem)*ncol(smitem)),ncol=ncol(smitem))
   for (j in 1:nrow(smitem)){
     d1<-smitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -1645,7 +1645,7 @@ maze_indiv_ex<-function(material=NULL,
   
   br4<-rep(c("}],"),each=nrow(sitem))
   sdat<-data.frame(br1,cond,item,br2,task,se,sitem,comma,a,smitem,br4)
-  sdat<-sdat %>% mutate_all(na_if,"")
+  sdat<-sdat %>% mutate_if(is.character, na_if, "")
   sdat<-sdat %>% select_if(all_na)
   colnames(sdat)<-1:ncol(sdat)
   sdat[is.na(sdat)] <- " "
@@ -1678,7 +1678,7 @@ maze_indiv_f<-function(material=NULL,
   list<-matrix(rep(NA,nrow(fitem)*ncol(fitem)),ncol=ncol(fitem))
   for (j in 1:nrow(fitem)){
     d1<-fitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -1710,7 +1710,7 @@ maze_indiv_f<-function(material=NULL,
   list<-matrix(rep(NA,nrow(fitem)*ncol(fmitem)),ncol=ncol(fmitem))
   for (j in 1:nrow(fmitem)){
     d1<-fmitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -1737,7 +1737,7 @@ maze_indiv_f<-function(material=NULL,
   
   fdat<-data.frame(br1,nf,item,br2,task,se,fitem,comma,a,fmitem,br4)
   
-  fdat<-fdat %>% mutate_all(na_if,"")
+  fdat<-fdat %>% mutate_if(is.character, na_if, "")
   fdat<-fdat %>% select_if(all_na)
   colnames(fdat)<-1:ncol(fdat)
   
@@ -1776,7 +1776,7 @@ cq_indiv_ex<-function(material=NULL,
   list<-matrix(rep(NA,nrow(sitem)*ncol(sitem)),ncol=ncol(sitem))
   for (j in 1:nrow(sitem)){
     d1<-sitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -1832,7 +1832,7 @@ cq_indiv_ex<-function(material=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   qoption<-cbind(qs,qoption,qe)
-  qoption<-qoption %>% mutate_all(na_if,"")
+  qoption<-qoption %>% mutate_if(is.character, na_if, "")
   qoption<-qoption %>% select_if(all_na)
   
   list<-matrix(rep(NA,nrow(qoption)*ncol(qoption)),ncol=ncol(qoption))
@@ -1853,7 +1853,7 @@ cq_indiv_ex<-function(material=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   correct_response<-cbind(qs,correct_response,qe)
-  correct_response<-correct_response %>% mutate_all(na_if,"")
+  correct_response<-correct_response %>% mutate_if(is.character, na_if, "")
   correct_response<-correct_response %>% select_if(all_na)
   list<-matrix(rep(NA,nrow(correct_response)*ncol(correct_response)),ncol=ncol(correct_response))
   for (j in 1:nrow(correct_response)){
@@ -1869,7 +1869,7 @@ cq_indiv_ex<-function(material=NULL,
   br6<-rep(c("], hasCorrect:"),each=nrow(sitem))
   br7<-rep(c("}],"),each=nrow(sitem))
   sdat<-data.frame(br1,cond,item,br2,task,se,br3,material2,br4,cq,br5,question,as,qoption,br6,correct_response,br7)
-  sdat<-sdat %>% mutate_all(na_if,"")
+  sdat<-sdat %>% mutate_if(is.character, na_if, "")
   sdat<-sdat %>% select_if(all_na)
   colnames(sdat)<-1:ncol(sdat)
   sdat[is.na(sdat)] <- " "
@@ -1902,7 +1902,7 @@ cq_indiv_f<-function(material=NULL,
   list<-matrix(rep(NA,nrow(fitem)*ncol(fitem)),ncol=ncol(fitem))
   for (j in 1:nrow(fitem)){
     d1<-fitem[j,]
-    d1<-d1 %>% mutate_all(na_if,"")
+    d1<-d1 %>% mutate_if(is.character, na_if, "")
     d1<-d1 %>% select_if(all_na)
     s<-dim(d1)[1]
     s<-d1[[s]]
@@ -1957,7 +1957,7 @@ cq_indiv_f<-function(material=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   qoption<-cbind(qs,qoption,qe)
-  qoption<-qoption %>% mutate_all(na_if,"")
+  qoption<-qoption %>% mutate_if(is.character, na_if, "")
   qoption<-qoption %>% select_if(all_na)
   
   list<-matrix(rep(NA,nrow(qoption)*ncol(qoption)),ncol=ncol(qoption))
@@ -1978,7 +1978,7 @@ cq_indiv_f<-function(material=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   correct_response<-cbind(qs,correct_response,qe)
-  correct_response<-correct_response %>% mutate_all(na_if,"")
+  correct_response<-correct_response %>% mutate_if(is.character, na_if, "")
   correct_response<-correct_response %>% select_if(all_na)
   list<-matrix(rep(NA,nrow(correct_response)*ncol(correct_response)),ncol=ncol(correct_response))
   for (j in 1:nrow(correct_response)){
@@ -1996,7 +1996,7 @@ cq_indiv_f<-function(material=NULL,
   
   fdat<-data.frame(br1,nf,item,br2,task,se,br3,material2,br4,cq,br5,question,as,qoption,br6,correct_response,br7)
   
-  fdat<-fdat %>% mutate_all(na_if,"")
+  fdat<-fdat %>% mutate_if(is.character, na_if, "")
   fdat<-fdat %>% select_if(all_na)
   colnames(fdat)<-1:ncol(fdat)
   fdat[is.na(fdat)] <- " "
@@ -2023,7 +2023,7 @@ cq_indiv_f<-function(material=NULL,
     list<-matrix(rep(NA,nrow(fnqitem)*ncol(fnqitem)),ncol=ncol(fnqitem))
     for (j in 1:nrow(fnqitem)){
       d1<-fnqitem[j,]
-      d1<-d1 %>% mutate_all(na_if,"")
+      d1<-d1 %>% mutate_if(is.character, na_if, "")
       d1<-d1 %>% select_if(all_na)
       s<-dim(d1)[1]
       s<-d1[[s]]
@@ -2048,7 +2048,7 @@ cq_indiv_f<-function(material=NULL,
     
     br4<-rep(c("]}],"),each=nrow(fnqitem))
     fdat2<-data.frame(br1,nf,item2,br2,task,se,br3,material2,br4)
-    fdat2<-fdat2 %>% mutate_all(na_if,"")
+    fdat2<-fdat2 %>% mutate_if(is.character, na_if, "")
     fdat2<-fdat2 %>% select_if(all_na)
     
     colnames(fdat2)<-1:ncol(fdat2)
