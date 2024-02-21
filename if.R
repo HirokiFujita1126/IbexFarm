@@ -1377,7 +1377,7 @@ spr_indiv_ex<-function(material=NULL,
   qs<-gsub('^a','"',qs)
   qe<-gsub('z$','"',qe)
   correct_response<-cbind(qs,correct_response,qe)
-  correct_response<-correct_response %>% mutate_all(na_if,"")
+  correct_response<-correct_response %>% mutate_if(is.character, na_if, "")
   correct_response<-correct_response %>% select_if(all_na)
   list<-matrix(rep(NA,nOfrow*ncol(correct_response)),ncol=ncol(correct_response))
   for (j in 1:nrow(correct_response)){
